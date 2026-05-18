@@ -35,7 +35,7 @@ export default function Navbar() {
           <Link href="/facilities">All Facilities</Link>
           
           <Link href="/bookings" className="opacity-60 hover:opacity-100">My Bookings</Link>
-          <Link href="/add" className="opacity-60 hover:opacity-100">Add Facility</Link>
+          <Link href="/add-facilities" className="opacity-60 hover:opacity-100">Add Facility</Link>
           <Link href="/manage" className="opacity-60 hover:opacity-100">Manage Facilities</Link>
         </div>
 
@@ -70,7 +70,7 @@ export default function Navbar() {
                     My Bookings
                   </Link>
                   <Link 
-                    href="/add" 
+                    href="/add-facilities" 
                     onClick={() => setIsDropdownOpen(false)}
                     className="block w-full px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
                   >
