@@ -8,6 +8,7 @@ import {
   Input,
   TextArea,
 } from "@heroui/react";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function AddFacilityForm() {
   const [loading, setLoading] = useState(false);
@@ -52,6 +53,7 @@ export default function AddFacilityForm() {
     })
     const data = await res.json();
     console.log(data);
+    toast.success("Facility added successfully!");
    
   };
 
