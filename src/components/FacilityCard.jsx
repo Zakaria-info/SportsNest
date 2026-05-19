@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { MapPin, Users, Clock, BadgeDollarSign } from "lucide-react";
+import Link from "next/link";
 
 const FacilityCard = ({ facility }) => {
   const {
+    _id,
     name,
     facility_type,
     image_url,
@@ -15,7 +17,6 @@ const FacilityCard = ({ facility }) => {
 
   return (
     <div className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-      
       {/* Image */}
       <div className="relative h-56 w-full overflow-hidden">
         <Image
@@ -28,18 +29,14 @@ const FacilityCard = ({ facility }) => {
 
       {/* Content */}
       <div className="space-y-4 p-5">
-        
         {/* Title */}
         <div>
           <h2 className="text-2xl font-bold text-gray-800">{name}</h2>
-          <p className="text-sm font-medium text-blue-600">
-            {facility_type}
-          </p>
+          <p className="text-sm font-medium text-blue-600">{facility_type}</p>
         </div>
 
         {/* Info */}
         <div className="space-y-2 text-sm text-gray-600">
-          
           <div className="flex items-center gap-2">
             <MapPin size={18} className="text-red-500" />
             <span>{location}</span>
@@ -62,14 +59,14 @@ const FacilityCard = ({ facility }) => {
         </div>
 
         {/* Description */}
-        <p className="line-clamp-2 text-sm text-gray-500">
-          {description}
-        </p>
+        <p className="line-clamp-2 text-sm text-gray-500">{description}</p>
 
         {/* Button */}
-        <button className="w-full rounded-xl bg-black py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-600">
-          Book Now
-        </button>
+        <Link href={`/facilities/${facility._id}`}>
+          <button className="w-full rounded-xl bg-black py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-600">
+            Book Now
+          </button>
+        </Link>
       </div>
     </div>
   );
