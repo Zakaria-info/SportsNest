@@ -44,6 +44,11 @@ const BookingForm = ({ facility }) => {
     user_email: userEmail,
   };
 
+  const {data:tokenData} = await authClient.token()
+  console.log(tokenData)
+
+
+
   try {
     const res = await fetch("http://localhost:5000/bookings", {
       method: "POST",

@@ -8,12 +8,22 @@ import {
 } from "lucide-react";
 
 import BookingForm from "@/components/BookingForm";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const FacilityDetailsPage = async ({ params }) => {
   const { id } = await params;
+  const {token} = await auth.api.getToken({
+    headers: await headers(),
+  })
+  console.log(token)
 
   const res = await fetch(
-    `http://localhost:5000/facilities/${id}`
+    `http://localhost:5000/facilities/${id}`,{
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+    }
   );
 
   const data = await res.json();

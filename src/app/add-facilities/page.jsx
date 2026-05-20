@@ -47,7 +47,7 @@ export default function AddFacilityForm() {
     const res = await fetch("http://localhost:5000/facilities",{
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
         body: JSON.stringify(facilityData)
     })
