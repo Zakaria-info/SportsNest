@@ -47,7 +47,7 @@ export default function AddFacilityForm() {
 
     const {data: tokenData} = await authClient.token()
 
-    const res = await fetch("http://localhost:5000/facilities",{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/facilities`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",

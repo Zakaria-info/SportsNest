@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Loading from "@/components/Loading";
+import { authClient } from "@/lib/auth-client";
 
 const ManagePage = () => {
   const [facilities, setFacilities] = useState([]);
@@ -11,7 +12,7 @@ const ManagePage = () => {
 
   // LOAD FACILITIES
   useEffect(() => {
-    fetch("http://localhost:5000/facilities")
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/facilities`)
       .then((res) => res.json())
       .then((data) => setFacilities(data))
       .catch((err) => console.error("Failed to load facilities", err))
@@ -29,7 +30,7 @@ const ManagePage = () => {
     const {data: tokenData} = await authClient.token()
 
     const res = await fetch(
-      `http://localhost:5000/facilities/${id}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`,
       {
         method: "DELETE",
         headers: {

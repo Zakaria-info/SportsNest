@@ -13,7 +13,7 @@ const UpdateFacilityPage = () => {
 
   // LOAD SINGLE FACILITY
   useEffect(() => {
-    fetch(`http://localhost:5000/facilities/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`)
       .then((res) => res.json())
       .then((data) => setFacility(data));
   }, [id]);
@@ -38,7 +38,7 @@ const UpdateFacilityPage = () => {
       
 
     const res = await fetch(
-      `http://localhost:5000/facilities/${id}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`,
       {
         method: "PUT",
         headers: {

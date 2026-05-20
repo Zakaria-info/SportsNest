@@ -24,7 +24,7 @@ const MyBookingsPage = () => {
 
     
 
-    fetch(`http://localhost:5000/bookings?email=${userEmail}`)
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings?email=${userEmail}`)
       .then((res) => res.json())
       .then((data) => setBookings(data))
       .catch((error) => {
@@ -43,7 +43,7 @@ const MyBookingsPage = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/bookings/${id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/${id}`,
         {
           method: "DELETE",
         },
