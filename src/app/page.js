@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import Connect from "@/components/Connect";
 import FeaturedFacility from "@/components/FeaturedFacility";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     <div>
       <Hero />
       <FeaturedFacility />
+      <Connect />
     </div>
   );
 }
