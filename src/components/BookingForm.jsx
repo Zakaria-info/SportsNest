@@ -168,7 +168,7 @@ const BookingForm = ({ facility }) => {
 
         <button
           type="submit"
-          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-black to-gray-800 py-4 text-lg font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-blue-600 hover:to-blue-500"
+          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-linear-to-r from-black to-gray-800 py-4 text-lg font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-blue-600 hover:to-blue-500"
         >
           <CalendarDays size={22} />
 

@@ -6,7 +6,7 @@ import { Zap } from "lucide-react"; // Import a 'spark' icon for extra energy
 export default function Hero() {
   return (
     <header className="relative w-full min-h-[75vh] flex items-center justify-center bg-sky-50 dark:bg-zinc-950 text-zinc-900 dark:text-white overflow-hidden transition-colors duration-300">
-      <div className="absolute inset-0 `bg-[radial-gradient(circle_at_center,#7dd3fc40_0%,transparent_70%)]` pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#7dd3fc40_0%,transparent_70%)] pointer-events-none" />
 
       {/* Main Content Area */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-7">
@@ -32,7 +32,7 @@ export default function Hero() {
         <div className="pt-5">
           <Link
             href="/facilities"
-            className="inline-flex items-center justify-center px-10 py-4 rounded-full text-base font-bold tracking-tight text-white bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-600 hover:to-emerald-600 active:scale-[0.97] shadow-lg shadow-sky-500/30 hover:shadow-sky-600/40 transition-all duration-200"
+            className="inline-flex items-center justify-center px-10 py-4 rounded-full text-base font-bold tracking-tight text-white bg-linear-to-r from-sky-500 to-emerald-500 hover:from-sky-600 hover:to-emerald-600 active:scale-[0.97] shadow-lg shadow-sky-500/30 hover:shadow-sky-600/40 transition-all duration-200"
           >
             Explore Facilities
           </Link>

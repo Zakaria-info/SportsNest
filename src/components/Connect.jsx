@@ -56,7 +56,7 @@ const Connect = () => {
                 className="group rounded-[2rem] border border-slate-200 bg-slate-50 p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div
-                  className={`mb-7 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br ${item.color} text-white shadow-lg shadow-slate-200/80`}
+                  className={`mb-7 inline-flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br ${item.color} text-white shadow-lg shadow-slate-200/80`}
                 >
                   <Icon className="h-10 w-10" />
                 </div>

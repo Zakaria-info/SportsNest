@@ -99,7 +99,7 @@ const FeaturedFacility = () => {
                                 <div className="mt-auto flex items-center gap-3">
                                     <Link
                                         href={`/facilities/${f._id}`}
-                                        className="rounded-lg bg-gradient-to-r from-black to-gray-800 px-4 py-2 text-sm font-semibold text-white hover:from-blue-600 hover:to-blue-500"
+                                        className="rounded-lg bg-linear-to-r from-black to-gray-800 px-4 py-2 text-sm font-semibold text-white hover:from-blue-600 hover:to-blue-500"
                                         aria-label={`View ${f.name}`}
                                     >
                                         Details

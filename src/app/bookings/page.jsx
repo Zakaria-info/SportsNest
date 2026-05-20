@@ -10,9 +10,11 @@ import {
 
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
+import Loading from "@/components/Loading";
 
 const MyBookingsPage = () => {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { data: session } = authClient.useSession();
 
   const userEmail = session?.user?.email || "user@gmail.com";
@@ -20,13 +22,16 @@ const MyBookingsPage = () => {
   useEffect(() => {
     if (!userEmail) return;
 
+    setLoading(true);
+
     fetch(`http://localhost:5000/bookings?email=${userEmail}`)
       .then((res) => res.json())
       .then((data) => setBookings(data))
       .catch((error) => {
         console.error("Failed to load bookings", error);
         toast.error("Could not load bookings");
-      });
+      })
+      .finally(() => setLoading(false));
   }, [userEmail]);
 
   const handleCancelBooking = async (id) => {
@@ -75,18 +80,16 @@ const MyBookingsPage = () => {
         </p>
       </div>
 
-      {/* EMPTY */}
-      {bookings.length === 0 && (
+      {/* EMPTY / LOADING */}
+      {loading ? (
+        <Loading cards={3} />
+      ) : bookings.length === 0 ? (
         <div className="rounded-3xl bg-white p-10 text-center shadow">
-          <h2 className="text-2xl font-bold text-gray-700">
-            No Bookings Found
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-700">No Bookings Found</h2>
 
-          <p className="mt-3 text-gray-500">
-            You have not booked any facility yet.
-          </p>
+          <p className="mt-3 text-gray-500">You have not booked any facility yet.</p>
         </div>
-      )}
+      ) : null}
 
       {/* BOOKING CARDS */}
       <div className="grid sm:grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
