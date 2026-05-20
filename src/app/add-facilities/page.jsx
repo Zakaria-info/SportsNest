@@ -9,6 +9,7 @@ import {
   TextArea,
 } from "@heroui/react";
 import { ToastContainer, toast } from 'react-toastify';
+import { authClient } from "@/lib/auth-client";
 
 export default function AddFacilityForm() {
   const [loading, setLoading] = useState(false);
@@ -44,10 +45,13 @@ export default function AddFacilityForm() {
 
     console.log(facilityData);
 
+    const {data: tokenData} = await authClient.token()
+
     const res = await fetch("http://localhost:5000/facilities",{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${tokenData?.token}`,
         },
         body: JSON.stringify(facilityData)
     })

@@ -22,7 +22,7 @@ const MyBookingsPage = () => {
   useEffect(() => {
     if (!userEmail) return;
 
-    setLoading(true);
+    
 
     fetch(`http://localhost:5000/bookings?email=${userEmail}`)
       .then((res) => res.json())
