@@ -26,10 +26,15 @@ const ManagePage = () => {
 
     if (!confirmDelete) return;
 
+    const {data: tokenData} = await authClient.token()
+
     const res = await fetch(
       `http://localhost:5000/facilities/${id}`,
       {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${tokenData?.token}`,
+        }
       }
     );
 

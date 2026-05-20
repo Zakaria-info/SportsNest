@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const UpdateFacilityPage = () => {
   const { id } = useParams();
@@ -33,6 +34,8 @@ const UpdateFacilityPage = () => {
       available_slots: form.available_slots.value,
       description: form.description.value,
     };
+    const {data:tokenData} = await authClient.token()
+      
 
     const res = await fetch(
       `http://localhost:5000/facilities/${id}`,
@@ -40,6 +43,7 @@ const UpdateFacilityPage = () => {
         method: "PUT",
         headers: {
           "content-type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`,
         },
         body: JSON.stringify(updatedFacility),
       }

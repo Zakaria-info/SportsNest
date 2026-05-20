@@ -45,7 +45,7 @@ const BookingForm = ({ facility }) => {
   };
 
   const {data:tokenData} = await authClient.token()
-  console.log(tokenData)
+  
 
 
 
@@ -54,6 +54,7 @@ const BookingForm = ({ facility }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${tokenData?.token}`,
       },
       body: JSON.stringify(bookingData),
     });
