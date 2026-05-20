@@ -89,7 +89,7 @@ const MyBookingsPage = () => {
       )}
 
       {/* BOOKING CARDS */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div className="grid sm:grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {bookings.map((booking) => (
           <div
             key={booking._id}
