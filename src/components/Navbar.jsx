@@ -9,9 +9,10 @@ import { authClient } from "@/lib/auth-client";
 export default function Navbar() {
   const {
     data: session,
-  }= authClient.useSession()
+  } = authClient.useSession();
   
   const user = session?.user;
+  const isAuthenticated = Boolean(user);
   const router = useRouter();
 
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -55,10 +56,14 @@ export default function Navbar() {
         {/* Navigation Links */}
         <div className="hidden items-center gap-6 text-sm font-medium text-zinc-700 dark:text-zinc-300 md:flex">
           <Link href="/">Home</Link>
-          <Link href="/facilities">All Facilities</Link>
-          <Link href="/bookings" className="opacity-60 hover:opacity-100">My Bookings</Link>
-          <Link href="/add-facilities" className="opacity-60 hover:opacity-100">Add Facility</Link>
-          <Link href="/manage" className="opacity-60 hover:opacity-100">Manage Facilities</Link>
+          {isAuthenticated && (
+            <>
+              <Link href="/facilities">All Facilities</Link>
+              <Link href="/bookings" className="opacity-60 hover:opacity-100">My Bookings</Link>
+              <Link href="/add-facilities" className="opacity-60 hover:opacity-100">Add Facility</Link>
+              <Link href="/manage" className="opacity-60 hover:opacity-100">Manage Facilities</Link>
+            </>
+          )}
         </div>
 
         {/* Right Side Controls */}
@@ -110,10 +115,14 @@ export default function Navbar() {
         <div className="mt-4 space-y-4 rounded-lg border border-zinc-200 bg-white p-4 text-sm font-medium text-zinc-700 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 md:hidden">
           <div className="flex flex-col gap-3">
             <Link href="/" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">Home</Link>
-            <Link href="/facilities" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">All Facilities</Link>
-            <Link href="/bookings" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">My Bookings</Link>
-            <Link href="/add-facilities" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">Add Facility</Link>
-            <Link href="/manage" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">Manage Facilities</Link>
+            {isAuthenticated && (
+              <>
+                <Link href="/facilities" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">All Facilities</Link>
+                <Link href="/bookings" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">My Bookings</Link>
+                <Link href="/add-facilities" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">Add Facility</Link>
+                <Link href="/manage" className="block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900">Manage Facilities</Link>
+              </>
+            )}
           </div>
           <div className="border-t border-zinc-200 pt-4 dark:border-zinc-800">
             {user ? (
