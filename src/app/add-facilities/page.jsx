@@ -9,7 +9,7 @@ import {
   TextArea,
 } from "@heroui/react";
 import { ToastContainer, toast } from 'react-toastify';
-import { authClient } from "@/lib/auth-client";
+import { getAuthToken } from "@/lib/auth-client";
 
 export default function AddFacilityForm() {
   const [loading, setLoading] = useState(false);
@@ -26,39 +26,37 @@ export default function AddFacilityForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const facilityData = Object.fromEntries(formData.entries());
 
-
-    // const facilityData = {
-    //   name: form.name.value,
-    //   facility_type: form.facility_type.value,
-    //   image_url: form.image_url.value,
-    //   location: form.location.value,
-    //   price_per_hour: form.price_per_hour.value,
-    //   capacity: form.capacity.value,
-    //   available_slots: form.available_slots.value,
-    //   description: form.description.value,
-    //   owner_email: form.owner_email.value,
-    // };
-
-    console.log(facilityData);
-
-    const {data: tokenData} = await authClient.token()
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/facilities`,{
+    try {
+      const token = await getAuthToken();
+      const res = await fetch(`/api/facilities`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${tokenData?.token}`,
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(facilityData)
-    })
-    const data = await res.json();
-    console.log(data);
-    toast.success("Facility added successfully!");
-   
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to add facility");
+      }
+
+      const data = await res.json();
+      console.log(data);
+      toast.success("Facility added successfully!");
+      e.currentTarget.reset();
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || "Error adding facility");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

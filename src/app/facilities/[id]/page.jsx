@@ -13,21 +13,42 @@ import { headers } from "next/headers";
 
 const FacilityDetailsPage = async ({ params }) => {
   const { id } = await params;
-  const {token} = await auth.api.getToken({
-    headers: await headers(),
-  })
-  console.log(token)
+  
+  if (!id) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 py-10">
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-10 text-center text-red-700">
+          <h1 className="text-2xl font-semibold">Invalid Facility ID</h1>
+          <p className="mt-2">Facility ID is missing or invalid.</p>
+        </div>
+      </div>
+    );
+  }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`,{
-      headers: {
-        authorization: `Bearer ${token}`
-      },
-    }
-  );
+  const { token } = await auth.api.getToken({ headers: await headers() });
+  console.log(token);
+
+  const baseURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+  const res = await fetch(`${baseURL}/api/facilities/${id}`, {
+    cache: "no-store",
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 py-10">
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-10 text-center text-red-700">
+          <h1 className="text-2xl font-semibold">Facility not found</h1>
+          <p className="mt-2">There was a problem loading this facility. Please try again.</p>
+        </div>
+      </div>
+    );
+  }
 
   const data = await res.json();
-
   const {
     name,
     facility_type,

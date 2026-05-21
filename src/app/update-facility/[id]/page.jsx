@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
+import { getAuthToken } from "@/lib/auth-client";
 
 const UpdateFacilityPage = () => {
   const { id } = useParams();
@@ -13,9 +13,28 @@ const UpdateFacilityPage = () => {
 
   // LOAD SINGLE FACILITY
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`)
-      .then((res) => res.json())
-      .then((data) => setFacility(data));
+    const fetchFacility = async () => {
+      try {
+        const token = await getAuthToken();
+        console.log("token", token);
+        const res = await fetch(`/api/facilities/${id}`, {
+          cache: "no-store",
+          headers: {
+            Method: "POST",
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) {
+          throw new Error("Failed to load facility");
+        }
+        const data = await res.json();
+        setFacility(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchFacility();
   }, [id]);
 
   // UPDATE FUNCTION
@@ -34,20 +53,16 @@ const UpdateFacilityPage = () => {
       available_slots: form.available_slots.value,
       description: form.description.value,
     };
-    const {data:tokenData} = await authClient.token()
-      
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-          authorization: `Bearer ${tokenData?.token}`,
-        },
-        body: JSON.stringify(updatedFacility),
-      }
-    );
+    const token = await getAuthToken();
+    const res = await fetch(`/api/facilities/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedFacility),
+    });
 
     const data = await res.json();
 

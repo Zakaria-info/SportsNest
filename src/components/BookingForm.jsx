@@ -23,9 +23,17 @@ const BookingForm = ({ facility }) => {
   const router = useRouter();
 
   const userEmail = session?.user?.email || "user@gmail.com";
+  const userId = session?.user?.id;
 
   const handleBooking = async (e) => {
   e.preventDefault();
+
+  // Check if user is authenticated
+  if (!userId) {
+    toast.error("Please login to make a booking");
+    router.push("/login");
+    return;
+  }
 
   const form = e.target;
 
@@ -33,6 +41,7 @@ const BookingForm = ({ facility }) => {
   const timeSlot = form.timeSlot.value;
 
   const bookingData = {
+    user_id: userId,
     facility_id: _id,
     facility_name: name,
     facility_image: image_url,
@@ -44,17 +53,11 @@ const BookingForm = ({ facility }) => {
     user_email: userEmail,
   };
 
-  const {data:tokenData} = await authClient.token()
-  
-
-
-
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings`, {
+    const res = await fetch(`/api/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${tokenData?.token}`,
       },
       body: JSON.stringify(bookingData),
     });

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Loading from "@/components/Loading";
-import { authClient } from "@/lib/auth-client";
 
 const ManagePage = () => {
   const [facilities, setFacilities] = useState([]);
@@ -12,11 +11,19 @@ const ManagePage = () => {
 
   // LOAD FACILITIES
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/facilities`)
-      .then((res) => res.json())
-      .then((data) => setFacilities(data))
-      .catch((err) => console.error("Failed to load facilities", err))
-      .finally(() => setLoading(false));
+    const loadFacilities = async () => {
+      try {
+        const res = await fetch(`/api/facilities`);
+        const data = await res.json();
+        setFacilities(data);
+      } catch (err) {
+        console.error("Failed to load facilities", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFacilities();
   }, []);
 
   // DELETE FUNCTION
@@ -27,17 +34,10 @@ const ManagePage = () => {
 
     if (!confirmDelete) return;
 
-    const {data: tokenData} = await authClient.token()
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/facilities/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${tokenData?.token}`,
-        }
-      }
-    );
+    const res = await fetch(`/api/facilities/${id}`, {
+    
+      method: "DELETE",
+    });
 
     const data = await res.json();
 

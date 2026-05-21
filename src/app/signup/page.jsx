@@ -99,7 +99,7 @@ const SignUpPage = () => {
               <Button type="submit" className="flex items-center gap-2 w-full">
                 Create Account
               </Button>
-              <Button className="flex items-center gap-2 w-full mt-3">
+              <Button type="button" className="flex items-center gap-2 w-full mt-3">
                 Sign Up with Google
               </Button>
             </div>

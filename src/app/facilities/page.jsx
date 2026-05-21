@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search, SlidersHorizontal } from "lucide-react";
 import FacilityCard from "@/components/FacilityCard";
+import { authClient } from "@/lib/auth-client";
 
 const AllFacilityPage = () => {
   const [facilities, setFacilities] = useState([]);
@@ -11,6 +13,18 @@ const AllFacilityPage = () => {
   const [selectedType, setSelectedType] = useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const router = useRouter();
+  const { data: session, status } = authClient.useSession();
+
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (status === "unauthenticated") {
+      router.replace(`/login?next=${encodeURIComponent("/facilities")}`);
+    }
+  }, [router, status]);
 
   const fetchFacilities = async (search, type) => {
     setLoading(true);
@@ -89,6 +103,14 @@ const AllFacilityPage = () => {
     );
     return ["all", ...types];
   }, [allFacilities]);
+
+  if (status === "loading" || status === "unauthenticated") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10 md:px-8 lg:px-16">
+        <p className="text-sm text-slate-600">Checking access…</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10 md:px-8 lg:px-16">

@@ -11,6 +11,7 @@ import {
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
 import Loading from "@/components/Loading";
+// removed unused import
 
 const MyBookingsPage = () => {
   const [bookings, setBookings] = useState([]);
@@ -24,7 +25,7 @@ const MyBookingsPage = () => {
 
     
 
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings?email=${userEmail}`)
+    fetch(`/api/bookings?email=${userEmail}`)
       .then((res) => res.json())
       .then((data) => setBookings(data))
       .catch((error) => {
@@ -43,10 +44,10 @@ const MyBookingsPage = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/${id}`,
+        `/api/bookings/${id}`,
         {
           method: "DELETE",
-        },
+        }
       );
 
       const data = await res.json();

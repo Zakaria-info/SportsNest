@@ -30,7 +30,8 @@ const LoginPage = () => {
 
         if (data) {
           toast.success('Logged in successfully! Redirecting...');
-          setTimeout(() => router.push('/'), 1200);
+          const nextPath = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('next') || '/' : '/';
+          setTimeout(() => router.push(nextPath), 1200);
         }
         if (error) {
           toast.error(error.message || 'Login failed');
@@ -87,7 +88,7 @@ const LoginPage = () => {
               <Button type="submit" className="flex items-center gap-2 w-full">
                 Log In
               </Button>
-              <Button className="flex items-center gap-2 w-full mt-3">
+              <Button type="button" className="flex items-center gap-2 w-full mt-3">
                 Sign In with Google
               </Button>
             </div>
