@@ -25,39 +25,51 @@ export default function AddFacilityForm() {
   ];
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
 
+  if (loading) return; // 🧠 prevent double submit
+
+  setLoading(true);
+
+  try {
     const formData = new FormData(e.currentTarget);
     const facilityData = Object.fromEntries(formData.entries());
 
+    const res = await fetch(`/api/facilities`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(facilityData),
+    });
+
+    // 🔥 safe response handling
+    let data = null;
+    const text = await res.text();
+
     try {
-      const token = await getAuthToken();
-      const res = await fetch(`/api/facilities`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(facilityData)
-      });
-
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to add facility");
-      }
-
-      const data = await res.json();
-      console.log(data);
-      toast.success("Facility added successfully!");
-      e.currentTarget.reset();
-    } catch (error) {
-      console.error(error);
-      toast.error(error.message || "Error adding facility");
-    } finally {
-      setLoading(false);
+      data = text ? JSON.parse(text) : {};
+    } catch (err) {
+      data = { message: text };
     }
-  };
+
+    if (!res.ok) {
+      throw new Error(data?.message || "Failed to add facility");
+    }
+
+    console.log("SUCCESS:", data);
+
+    toast.success("Facility added successfully!");
+
+    // ✅ safe reset (important fix)
+    e.target.reset();
+  } catch (error) {
+    console.error("ERROR:", error);
+    toast.error(error.message || "Error adding facility");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">

@@ -15,13 +15,10 @@ const UpdateFacilityPage = () => {
   useEffect(() => {
     const fetchFacility = async () => {
       try {
-        const token = await getAuthToken();
-        console.log("token", token);
         const res = await fetch(`/api/facilities/${id}`, {
           cache: "no-store",
           headers: {
             Method: "POST",
-            authorization: `Bearer ${token}`,
           },
         });
         if (!res.ok) {

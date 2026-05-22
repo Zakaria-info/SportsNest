@@ -1,3 +1,5 @@
+"use server";
+
 import Image from "next/image";
 import {
   MapPin,
@@ -13,42 +15,67 @@ import { headers } from "next/headers";
 
 const FacilityDetailsPage = async ({ params }) => {
   const { id } = await params;
-  
+
   if (!id) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-10">
+      <div className="flex min-h-screen items-center justify-center px-4 py-10">
         <div className="rounded-3xl border border-red-200 bg-red-50 p-10 text-center text-red-700">
-          <h1 className="text-2xl font-semibold">Invalid Facility ID</h1>
-          <p className="mt-2">Facility ID is missing or invalid.</p>
+          <h1 className="text-2xl font-semibold">
+            Invalid Facility ID
+          </h1>
+
+          <p className="mt-2">
+            Facility ID is missing or invalid.
+          </p>
         </div>
       </div>
     );
   }
 
-  const { token } = await auth.api.getToken({ headers: await headers() });
-  console.log(token);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const baseURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  let token = "";
 
-  const res = await fetch(`${baseURL}/api/facilities/${id}`, {
-    cache: "no-store",
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const session = await auth.api.getToken({
+      headers: await headers(),
+    });
+
+    token = session?.token || "";
+  } catch (error) {
+    console.log("Token Error:", error);
+  }
+
+  const res = await fetch(
+    `${API_URL}/facilities/${id}`,
+    {
+      cache: "no-store",
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {},
+    }
+  );
 
   if (!res.ok) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-10">
+      <div className="flex min-h-screen items-center justify-center px-4 py-10">
         <div className="rounded-3xl border border-red-200 bg-red-50 p-10 text-center text-red-700">
-          <h1 className="text-2xl font-semibold">Facility not found</h1>
-          <p className="mt-2">There was a problem loading this facility. Please try again.</p>
+          <h1 className="text-2xl font-semibold">
+            Facility not found
+          </h1>
+
+          <p className="mt-2">
+            There was a problem loading this facility.
+          </p>
         </div>
       </div>
     );
   }
 
   const data = await res.json();
+
   const {
     name,
     facility_type,
@@ -64,9 +91,7 @@ const FacilityDetailsPage = async ({ params }) => {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-100 via-white to-slate-200 px-4 py-10 md:px-8 lg:px-16">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* LEFT SIDE */}
         <div className="overflow-hidden rounded-[30px] bg-white shadow-2xl lg:col-span-2">
-          {/* IMAGE */}
           <div className="relative h-70 w-full md:h-125 xl:h-150">
             <Image
               src={image_url}
@@ -95,10 +120,8 @@ const FacilityDetailsPage = async ({ params }) => {
             </div>
           </div>
 
-          {/* CONTENT */}
           <div className="space-y-8 p-6 md:p-10">
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {/* PRICE */}
               <div className="rounded-3xl border border-gray-200 bg-linear-to-br from-white to-slate-50 p-6 shadow-sm">
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100">
                   <BadgeDollarSign
@@ -116,7 +139,6 @@ const FacilityDetailsPage = async ({ params }) => {
                 </h2>
               </div>
 
-              {/* CAPACITY */}
               <div className="rounded-3xl border border-gray-200 bg-linear-to-br from-white to-slate-50 p-6 shadow-sm">
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100">
                   <Users
@@ -134,7 +156,6 @@ const FacilityDetailsPage = async ({ params }) => {
                 </h2>
               </div>
 
-              {/* SLOT */}
               <div className="rounded-3xl border border-gray-200 bg-linear-to-br from-white to-slate-50 p-6 shadow-sm">
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100">
                   <Clock3
@@ -153,7 +174,6 @@ const FacilityDetailsPage = async ({ params }) => {
               </div>
             </div>
 
-            {/* DESCRIPTION */}
             <div className="rounded-3xl border border-gray-200 bg-slate-50 p-6 md:p-8">
               <h2 className="mb-5 text-3xl font-bold text-gray-800">
                 About This Facility
@@ -164,7 +184,6 @@ const FacilityDetailsPage = async ({ params }) => {
               </p>
             </div>
 
-            {/* OWNER */}
             <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
@@ -189,7 +208,6 @@ const FacilityDetailsPage = async ({ params }) => {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
         <BookingForm facility={data} />
       </div>
     </div>

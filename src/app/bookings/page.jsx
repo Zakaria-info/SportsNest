@@ -18,7 +18,7 @@ const MyBookingsPage = () => {
   const [loading, setLoading] = useState(true);
   const { data: session } = authClient.useSession();
 
-  const userEmail = session?.user?.email || "user@gmail.com";
+  const userEmail = session?.user?.email
 
   useEffect(() => {
     if (!userEmail) return;
@@ -52,7 +52,7 @@ const MyBookingsPage = () => {
 
       const data = await res.json();
 
-      if (data.deletedCount > 0) {
+      if (data?.deletedCount > 0 || data?.success) {
         toast.success("Booking Cancelled");
 
         const remaining = bookings.filter(
